@@ -1,0 +1,3 @@
+C:\Users\2092\Documents\ZAP473\Informática Gráfica\Template\ConsoleApplication1\Debug\ConsoleApplication1.exe
+C:\Users\2092\Documents\ZAP473\Informática Gráfica\Template\ConsoleApplication-aCTIVIDAD1\Debug\ConsoleApplication1.exe
+C:\Users\2092\Documents\ZAP473\Informática Gráfica\1° Parcial\Actividad 1\Debug\ConsoleApplication1.exe
