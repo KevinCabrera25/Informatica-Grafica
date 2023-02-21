@@ -129,15 +129,57 @@ void renderScene(void)
 	// 1st Polygon
 	glBegin(GL_POLYGON);
 	// Color White
-	glColor3f(1.0f, 1.0f, 1.0f);
+	/*
 	glVertex3f(0.5f, 1.0f, 0.0f);
 	glVertex3f(0.5f, 0.0f, 0.0f);
 	glVertex3f(1.5f, -1.0f, 0.0f);
 	glVertex3f(2.5f, 0.0f, 0.0f);
 	glVertex3f(4.5f, 0.0f, 0.0f);
-	glVertex3f(5.0f, -1.0f, 0.0f);
-	glVertex3f(6.0f, 0.0f, 0.0f);
-	glVertex3f(6.0f, 1.0f, 0.0f);
+	glVertex3f(5.5f, -1.0f, 0.0f);
+	glVertex3f(6.5f, 0.0f, 0.0f);
+	glVertex3f(6.5f, 1.0f, 0.0f);
+	glEnd();
+	*/
+
+	// 1st Figure
+	// Quad Base
+	glBegin(GL_QUADS);
+	// Color White
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(0.5f, 1.0f, 0.0f);
+	glVertex3f(0.5f, 0.0f, 0.0f);
+	glVertex3f(6.5f, 0.0f, 0.0f);
+	glVertex3f(6.5f, 1.0f, 0.0f);
+	glEnd();
+	// Triangles
+	glBegin(GL_TRIANGLES);
+	// Color White
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(0.5f, 0.0f, 0.0f);
+	glVertex3f(1.5f, -1.0f, 0.0f);
+	glVertex3f(2.5f, 0.0f, 0.0f);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	// Color White
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(4.5f, 0.0f, 0.0f);
+	glVertex3f(5.5f, -1.0f, 0.0f);
+	glVertex3f(6.5f, 0.0f, 0.0f);
+	glEnd();
+
+	// 2nd Figure
+	glBegin(GL_TRIANGLE_FAN);
+	// Color Turquoise
+	// Triangle Base
+	glColor3f(0.0f, 25.0f, 25.0f);
+	glVertex3f(8.0f, 0.0f, 0.0f);
+	glVertex3f(8.0f, -2.0f, 0.0f);
+	glVertex3f(9.0f, -1.0f, 0.0f);
+	// Triangles Vertex
+	glVertex3f(9.5f, 0.0f, 0.0f);
+	glVertex3f(9.0f, 1.5f, 0.0f);
+	glVertex3f(8.0f, 2.0f, 0.0f);
 	glEnd();
 
 
