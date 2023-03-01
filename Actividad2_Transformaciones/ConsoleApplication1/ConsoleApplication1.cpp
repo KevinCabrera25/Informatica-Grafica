@@ -16,7 +16,14 @@ float dt = 0;
 
 float speed = 40;
 float angle = 0;
-
+// Scale variables
+float triangleScale = 0;
+float speedScale = 2;
+bool scaling = true;
+// Translate variables
+float triangleTranslate = 0;
+float speedTranslate = 2;
+bool translating = true;
 
 #pragma region OpenGLSetupInputAndStuff
 
@@ -108,29 +115,85 @@ void renderScene(void)
 	//glPopMatrix();
 	glEnd();
 	*/
-	
+
 	angle += dt * speed;
+
+	// Conditionals for Scaling
+	if (scaling)
+	{
+		triangleScale += dt * speedScale;
+		if (triangleScale > 1)
+		{
+			scaling = false;
+		}
+	}
+
+	else
+	{
+		triangleScale -= dt * speedScale;
+		if (triangleScale <= 0)
+		{
+			scaling = true;
+		}
+	}
+
+	// Conditionals for Translating
+	if (translating)
+	{
+		triangleTranslate += dt * speedTranslate;
+		if (triangleTranslate > 2)
+		{
+			translating = false;
+		}
+	}
+	
+	else
+	{
+		triangleTranslate -= dt * speedTranslate;
+		if (triangleTranslate <= 0)
+		{
+			translating = true;
+		}
+	}
 
 	// Color White
 	glColor3f(1.0f, 1.0f, 1.0f);
 	// Call to the function drawSquare
 	drawSquare();
 	glPushMatrix();
-	glRotatef(angle, 0.0f, 1.0f, 1.0f);
-		// Transformation of the first Triangle
+	glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		glPushMatrix();
-		glTranslatef(0.0f, 1.5f, 0.0f);
-		// Call to the function drawTriangle with values for Green Colors
-		glColor3f(0.0f, 1.0f, 0.0f);
-		drawTriangle();
-		// Transformation of the second Triangle
+		glRotatef(angle, 0.0f, 1.0f, 0.0f);
+			// Transformation of the first Triangle
+			glPushMatrix();
+			glTranslatef(0.0f, 1.5f, 0.0f);
+			// Call to the function drawTriangle with values for Green Colors
+			glColor3f(0.0f, 1.0f, 0.0f);
+			drawTriangle();
+			// Transformation of the second Triangle
 			glTranslatef(0.0, 1.5f, 0.0f);
 			// Call to the function drawTriangle with values for Yellow Color
 			glColor3f(1.0f, 1.0f, 0.0f);
 			drawTriangle();
-		glPopMatrix();
+			glPopMatrix();
+		glPopMatrix();	
 	glPopMatrix();
 
+	glPushMatrix();
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		glPushMatrix();
+			// Transformation of the second Triangle
+			glTranslatef(0.0f, 4.5f, 0.0f);
+			glPushMatrix();
+				glScalef(triangleScale, triangleScale, triangleScale);
+				glPushMatrix();
+					glTranslatef(0.0f, triangleTranslate, 0.0f);
+					drawTriangle();
+				glPopMatrix();
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
 	
 	/*
 
