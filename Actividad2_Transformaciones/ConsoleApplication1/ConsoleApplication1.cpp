@@ -40,7 +40,7 @@ void changeWindowSize(int w, int h)
 	glMatrixMode(GL_PROJECTION);
 
 	// Reinicia Matriz
-	glLoadIdentity(); 
+	glLoadIdentity();
 
 	// Hace que el Viewport use toda la pantalla
 	glViewport(0, 0, w, h);
@@ -146,7 +146,7 @@ void renderScene(void)
 			translating = false;
 		}
 	}
-	
+
 	else
 	{
 		triangleTranslate -= dt * speedTranslate;
@@ -161,22 +161,22 @@ void renderScene(void)
 	// Call to the function drawSquare
 	drawSquare();
 	glPushMatrix();
-	glRotatef(angle, 0.0f, 0.0f, 1.0f);
+		glRotatef(angle, 0.0f, 0.0f, 1.0f);
 		glPushMatrix();
-		glRotatef(angle, 0.0f, 1.0f, 0.0f);
+			glRotatef(angle, 0.0f, 1.0f, 0.0f);
 			// Transformation of the first Triangle
 			glPushMatrix();
-			glTranslatef(0.0f, 1.5f, 0.0f);
-			// Call to the function drawTriangle with values for Green Colors
-			glColor3f(0.0f, 1.0f, 0.0f);
-			drawTriangle();
-			// Transformation of the second Triangle
-			glTranslatef(0.0, 1.5f, 0.0f);
-			// Call to the function drawTriangle with values for Yellow Color
-			glColor3f(1.0f, 1.0f, 0.0f);
-			drawTriangle();
+				glTranslatef(0.0f, 1.5f, 0.0f);
+				// Call to the function drawTriangle with values for Green Colors
+				glColor3f(0.0f, 1.0f, 0.0f);
+				drawTriangle();
+				// Transformation of the second Triangle
+				glTranslatef(0.0, 1.5f, 0.0f);
+				// Call to the function drawTriangle with values for Yellow Color
+				glColor3f(1.0f, 1.0f, 0.0f);
+				drawTriangle();
 			glPopMatrix();
-		glPopMatrix();	
+		glPopMatrix();
 	glPopMatrix();
 
 	glPushMatrix();
@@ -194,24 +194,24 @@ void renderScene(void)
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
-	
+
 	/*
 
 	// Center Quad
 	glBegin(GL_QUADS);
 	glPushMatrix();
 	// Color White
-	glColor3f(1.0f, 1.0f, 1.0f);	
+	glColor3f(1.0f, 1.0f, 1.0f);
 	// Vertex
 	glVertex3f(1.0f, -1.0f, 0.0f);
 	glVertex3f(1.0f, 1.0f, 0.0f);
 	glVertex3f(-1.0f, 1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 0.0f);	
+	glVertex3f(-1.0f, -1.0f, 0.0f);
 	glPopMatrix();
 	glEnd();
 
 	// TRIANGLES
-	
+
 	// Triangle 1
 	glBegin(GL_TRIANGLES);
 	glPushMatrix();
