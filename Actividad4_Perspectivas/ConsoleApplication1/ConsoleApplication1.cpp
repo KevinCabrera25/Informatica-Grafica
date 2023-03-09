@@ -1,4 +1,4 @@
-// Actividad 3 Piramide	
+// Actividad 4 Perspectivas	
 // Kevin Cabrera
 
 #include <Windows.h>
@@ -6,46 +6,24 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
-
-
 using namespace std;
 
 //Variables  para contar el tiempo
 int t = 1, old_t = 1;
 float dt = 0;
-short patron = 0xABAB;
 float angle = 0;
 float speed = 40;
-
-
-void DrawLine()
-{
-	glEnable(GL_LINE_STIPPLE); ///habilitar patrones
-	glColor3f(1.0f, .6f, 0.3f);
-	glLineWidth(1.0f);
-	glLineStipple(8, patron);
-	glBegin(GL_LINES);
-	glVertex3f(-2.0f, 1.5f, 2.0f);
-	glVertex3f(0.0f, 2.0f, 2.0f);
-	glVertex3f(0.0f, 2.0f, 2.0f);
-	glVertex3f(2.0f, 1.5f, 2.0f);
-	glEnd();
-	glDisable(GL_LINE_STIPPLE);///apagamos patron
-}
 
 void DrawQuads()
 {
 	glBegin(GL_QUADS);
 	// Vertex
-	glVertex3f(1.0f, -0.5f, 0.0f);
-	glVertex3f(1.0f, 0.5f, 0.0f);
-	glVertex3f(-1.0f, 0.5f, 0.0f);
-	glVertex3f(-1.0f, -0.5f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.0f);
+	glVertex3f(0.5f, 0.5f, 0.0f);
+	glVertex3f(-0.5f, 0.5f, 0.0f);
+	glVertex3f(-0.5f, -0.5f, 0.0f);
 	glEnd();
 }
-
-
-
 
 #pragma region OpenGLSetupInputAndStuff
 
@@ -74,6 +52,54 @@ void changeWindowSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+// Change to Orthographic View
+void changeWindowSizeOrtho()
+{
+	// Matriz de proyección
+	glMatrixMode(GL_PROJECTION);
+
+	// Reinicia Matriz
+	glLoadIdentity();
+
+	glOrtho(-1.0f, 1.0f, -1.0f, 1.0f,//left,right,bottom,top
+		1.0f, 1000.0f);
+
+	// Matriz de modelos del Modelview
+	glMatrixMode(GL_MODELVIEW);
+}
+
+// Change to Frustum View
+void changeWindowSizeFrustum()
+{
+	// Matriz de proyección
+	glMatrixMode(GL_PROJECTION);
+
+	// Reinicia Matriz
+	glLoadIdentity();
+
+	glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, //left,right,bottom,top
+		1.0f, 1000.0f);
+
+	// Matriz de modelos del Modelview
+	glMatrixMode(GL_MODELVIEW);
+}
+
+// Change to Perspective View
+void changeWindowSizePerspective()
+{
+	// Matriz de proyección
+	glMatrixMode(GL_PROJECTION);
+
+	// Reinicia Matriz
+	glLoadIdentity();
+
+	gluPerspective(45.0f, 1600 * 1.0 / 900, 0.1f, 100.0f);
+	//fov, aspectRatio, nearclip,farclip
+
+	// Matriz de modelos del Modelview
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void Initialization() {
 	cout << "Codigo inicial aqui" << endl;
 }
@@ -97,80 +123,69 @@ void renderScene(void)
 
 	angle += dt * speed;
 
+
 	glPushMatrix();
-		glRotatef(angle, 0.0f, 1.0f, 0.0f);
-		glColor3f(0.0f, 1.0f, 0.0f);
-		DrawQuads();
-		glPushMatrix();
-			glTranslatef(0.0f, 0.0f, 5.0f);
-			glColor3f(0.0f, 0.0f, 1.0f);
+
+		glRotatef(angle, 0.5f, 1.0f, 0.0f);
+
+		glPushMatrix(); // Green Quad
+
+			glColor3f(0.0f, 1.0f, 0.0f);
+			glTranslatef(0.0f, 0.0f, 2.5f);
 			DrawQuads();
+
 		glPopMatrix();
-	glPopMatrix();
 
-	glPushMatrix();
-		glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-		glPushMatrix();
-			glRotatef(angle, 0.0f, 1.0f, 0.0f);
-			glTranslatef(-1.0f, 0.0f, 1.0f);
-			glPushMatrix();
-				glScalef(2.0f, 1.0f, 0.0f);
-				glTranslatef(0.0f, 0.0f, 2.0f);
-				glColor3f(0.98f, 0.76f, 0.0f);
-				DrawQuads();
-			glPopMatrix();
-		glPopMatrix();		
-	glPopMatrix();
+		glPushMatrix(); // Blue Quad
 
-	/*
-	glPushMatrix();
-	glRotatef(angle, 0.0f, 1.0f, 0.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glBegin(GL_TRIANGLES);
-	glColor3f(0.0f, 0.6f, 1.0f);
-	glVertex3f(0.0f, 0.5f, -0.5f);
-	glVertex3f(-0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.0f);
-	glEnd();
-	glPopMatrix();
+			glColor3f(0.0f, 0.0f, 1.0f);
+			glTranslatef(0.0f, 0.0f, -2.5f);
+			DrawQuads();
 
-	glPushMatrix();
-	glRotatef(angle, 0.0f, 1.0f, 0.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.5f, -0.5f);
-	glVertex3f(-0.5f, -0.5f, -1.0f);
-	glVertex3f(0.5f, -0.5f, -1.0f);
-	glEnd();
-	glPopMatrix();
+		glPopMatrix();
 
-	glPushMatrix();
-	glRotatef(angle, 0.0f, 1.0f, 0.0f);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_FRONT);
-	glPolygonMode(GL_BACK, GL_FILL);
-	glBegin(GL_TRIANGLES);
-	glColor3f(0.0f, 1.0f, 0.0f);
-	glVertex3f(0.0f, 0.5f, -0.5f);
-	glVertex3f(-0.5f, -0.5f, -1.0f);
-	glVertex3f(-0.5f, -0.5f, 0.0f);
-	glEnd();
-	glDisable(GL_CULL_FACE);
-	glPopMatrix();
+		glPushMatrix(); // Red Quad
 
-	glPushMatrix();
-	glRotatef(angle, 0.0f, 1.0f, 0.0f);
-	glPolygonMode(GL_FRONT, GL_FILL);
-	glBegin(GL_QUADS);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(-0.5f, -0.5f, -1.0f);
-	glVertex3f(-0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, -0.5f, -1.0f);
-	glEnd();
+			glColor3f(1.0f, 0.0f, 0.0f);
+			glRotatef(90, 1, 0, 0);
+			glTranslatef(0.0f, 0.0f, 0.5f);
+			glScalef(1, 5, 1);
+			DrawQuads();
+
+		glPopMatrix();
+
+		glPushMatrix(); // Orange Quad
+
+			glColor3f(1.0f, 0.5f, 0.0f);
+			glRotatef(90, 1, 0, 0);
+			glTranslatef(0.0f, 0.0f, -0.5f);
+			glScalef(1, 5, 1);
+			DrawQuads();
+
+		glPopMatrix();
+
+		glPushMatrix(); // Yellow Quad
+
+			glColor3f(1.0f, 1.0f, 0.0f);
+			glRotatef(90, 0, 1, 0);
+			glTranslatef(0.0f, 0.0f, 0.5f);
+			glScalef(5, 1, 1);
+			DrawQuads();
+
+		glPopMatrix();
+
+		glPushMatrix(); // Purple Quad
+
+			glColor3f(1.0f, 0.0f, 1.0f);
+			glRotatef(90, 0, 1, 0);
+			glTranslatef(0.0f, 0.0f, -0.5f);
+			glScalef(5, 1, 1);
+			DrawQuads();
+
+		glPopMatrix();
+
+
 	glPopMatrix();
-	*/
 
 	glutSwapBuffers(); //intercambia los búferes de la ventana actual si tiene doble búfer.
 }
@@ -186,7 +201,14 @@ void InputDown(int key, int xx, int yy)
 {
 	switch (key)
 	{
-	case GLUT_KEY_UP://GLUT_KEY_UP:		
+	case GLUT_KEY_LEFT://Vista Ortho
+		changeWindowSizeOrtho();
+		break;
+	case GLUT_KEY_RIGHT://Vista Perspective
+		changeWindowSizePerspective();
+		break;
+	case GLUT_KEY_UP://Vista Frustum
+		changeWindowSizeFrustum();
 		break;
 	}
 }
@@ -226,4 +248,3 @@ int main(int argc, char* argv[]) {
 
 	return 1;
 }
-
