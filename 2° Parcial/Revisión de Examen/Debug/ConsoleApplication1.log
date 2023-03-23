@@ -1,0 +1,5 @@
+﻿  ConsoleApplication1.cpp
+C:\Users\2092\Documents\ZAP473\Informática Gráfica\1° Parcial\Informatica-Grafica\Examen\ConsoleApplication1\ConsoleApplication1.cpp(252,14): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  PyramidController.cpp
+  Generando código...
+  ConsoleApplication1.vcxproj -> C:\Users\2092\Documents\ZAP473\Informática Gráfica\1° Parcial\Informatica-Grafica\Examen\ConsoleApplication1\Debug\ConsoleApplication1.exe

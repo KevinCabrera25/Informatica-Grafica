@@ -17,6 +17,8 @@ float PI = 3.1416f;
 float Tau = PI * 2.0f;
 float PI2 = PI / 2.0f;
 
+float angle = 0.0f;
+
 float posicionY = 0;
 
 #pragma region OpenGLSetupInputAndStuff
