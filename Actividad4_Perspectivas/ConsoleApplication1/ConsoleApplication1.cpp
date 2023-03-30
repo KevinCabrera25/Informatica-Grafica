@@ -1,29 +1,117 @@
-// Actividad 4 Perspectivas	
-// Kevin Cabrera
-
 #include <Windows.h>
 #include <thread>
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
+#include <ctime>
+#include <random>
+
+
+
 using namespace std;
 
 //Variables  para contar el tiempo
 int t = 1, old_t = 1;
 float dt = 0;
-float angle = 0;
-float speed = 40;
+float velocidadAngulo = 60.0f;
+float angulo;
+float slider = 0;
+float amplitud = 20;
+bool goingLeft = false, goingRight = false;
+float ftejem;
 
-void DrawQuads()
+void randomNum(float ft)
 {
-	glBegin(GL_QUADS);
-	// Vertex
-	glVertex3f(0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, 0.5f, 0.0f);
-	glVertex3f(-0.5f, 0.5f, 0.0f);
-	glVertex3f(-0.5f, -0.5f, 0.0f);
-	glEnd();
+	random_device rd;
+	mt19937 gen(rd());
+
+	uniform_real_distribution<double> dist(0.0, 1.0);
+
+	ft = dist(gen);
 }
+int num = (rand() % 11) - 5; //0 a 10; //-5 a 5
+
+Piramide Piramide1 = Piramide();
+
+Piramide* arrayPiramides = new Piramide[9];
+
+
+float colores[10][3]
+{
+
+
+
+};
+void drawBigSquare()
+{
+	// frente
+	glColor3f(0, 0, 1);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_QUADS);
+	glVertex3f(6, 6, 0);
+	glVertex3f(6, 0, 0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 6, 0);
+	glEnd();
+
+
+	// detras
+	glColor3f(0, 1, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_QUADS);
+	glVertex3f(6, 6, -6);
+	glVertex3f(6, 0, -6);
+	glVertex3f(0, 0, -6);
+	glVertex3f(0, 6, -6);
+	glEnd();
+
+
+	// cara izquierda
+	glColor3f(0.5, 0, 0.5);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_QUADS);
+	glVertex3f(6, 6, 0);
+	glVertex3f(6, 0, 0);
+	glVertex3f(6, 0, -6);
+	glVertex3f(6, 6, -6);
+	glEnd();
+
+
+	// cara derecha
+	glColor3f(1, 1, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_QUADS);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 6, 0);
+	glVertex3f(0, 6, -6);
+	glVertex3f(0, 0, -6);
+	glEnd();
+
+
+	// base
+
+	glColor3f(0, 0.5, 0.5);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glBegin(GL_QUADS);
+	glVertex3f(6, 0, 0);
+	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, -6);
+	glVertex3f(6, 0, -6);
+	glEnd();
+
+
+	// tapa
+	glColor3f(1, 0, 0);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_QUADS);
+	glVertex3f(6, 6, 0);
+	glVertex3f(0, 6, 0);
+	glVertex3f(0, 6, -6);
+	glVertex3f(6, 6, -6);
+	glEnd();
+
+}
+
 
 #pragma region OpenGLSetupInputAndStuff
 
@@ -52,56 +140,13 @@ void changeWindowSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-// Change to Orthographic View
-void changeWindowSizeOrtho()
-{
-	// Matriz de proyección
-	glMatrixMode(GL_PROJECTION);
 
-	// Reinicia Matriz
-	glLoadIdentity();
-
-	glOrtho(-1.0f, 1.0f, -1.0f, 1.0f,//left,right,bottom,top
-		1.0f, 1000.0f);
-
-	// Matriz de modelos del Modelview
-	glMatrixMode(GL_MODELVIEW);
-}
-
-// Change to Frustum View
-void changeWindowSizeFrustum()
-{
-	// Matriz de proyección
-	glMatrixMode(GL_PROJECTION);
-
-	// Reinicia Matriz
-	glLoadIdentity();
-
-	glFrustum(-1.0f, 1.0f, -1.0f, 1.0f, //left,right,bottom,top
-		1.0f, 1000.0f);
-
-	// Matriz de modelos del Modelview
-	glMatrixMode(GL_MODELVIEW);
-}
-
-// Change to Perspective View
-void changeWindowSizePerspective()
-{
-	// Matriz de proyección
-	glMatrixMode(GL_PROJECTION);
-
-	// Reinicia Matriz
-	glLoadIdentity();
-
-	gluPerspective(45.0f, 1600 * 1.0 / 900, 0.1f, 100.0f);
-	//fov, aspectRatio, nearclip,farclip
-
-	// Matriz de modelos del Modelview
-	glMatrixMode(GL_MODELVIEW);
-}
 
 void Initialization() {
 	cout << "Codigo inicial aqui" << endl;
+	randomNum(ftejem);
+	cout << ftejem << endl;
+	cout << num << endl;
 }
 
 void renderScene(void)
@@ -113,79 +158,37 @@ void renderScene(void)
 	glLoadIdentity();
 
 	gluLookAt(
-		0, 0.0f, 10.0f, //pos
+		(sin(slider) * amplitud), 0, (cos(slider) * amplitud), //pos
 		0.0f, 0.0f, 0, //target
 		0.0f, 1.0f, 0.0f); //up Vector
+
+
 
 	t = glutGet(GLUT_ELAPSED_TIME); //Obteniendo el tiempo y el delta
 	dt = (t - old_t) / 1000.0f;
 	old_t = t;
 
-	angle += dt * speed;
-
-
+	if (goingLeft) slider -= dt * 5;
+	if (goingRight) slider += dt * 5;
+	angulo += velocidadAngulo * dt;
+	// Actualiza la variable de escala
 	glPushMatrix();
 
-		glRotatef(angle, 0.5f, 1.0f, 0.0f);
+	glTranslatef(-3, -3, 3);
 
-		glPushMatrix(); // Green Quad
-
-			glColor3f(0.0f, 1.0f, 0.0f);
-			glTranslatef(0.0f, 0.0f, 2.5f);
-			DrawQuads();
-
-		glPopMatrix();
-
-		glPushMatrix(); // Blue Quad
-
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glTranslatef(0.0f, 0.0f, -2.5f);
-			DrawQuads();
-
-		glPopMatrix();
-
-		glPushMatrix(); // Red Quad
-
-			glColor3f(1.0f, 0.0f, 0.0f);
-			glRotatef(90, 1, 0, 0);
-			glTranslatef(0.0f, 0.0f, 0.5f);
-			glScalef(1, 5, 1);
-			DrawQuads();
-
-		glPopMatrix();
-
-		glPushMatrix(); // Orange Quad
-
-			glColor3f(1.0f, 0.5f, 0.0f);
-			glRotatef(90, 1, 0, 0);
-			glTranslatef(0.0f, 0.0f, -0.5f);
-			glScalef(1, 5, 1);
-			DrawQuads();
-
-		glPopMatrix();
-
-		glPushMatrix(); // Yellow Quad
-
-			glColor3f(1.0f, 1.0f, 0.0f);
-			glRotatef(90, 0, 1, 0);
-			glTranslatef(0.0f, 0.0f, 0.5f);
-			glScalef(5, 1, 1);
-			DrawQuads();
-
-		glPopMatrix();
-
-		glPushMatrix(); // Purple Quad
-
-			glColor3f(1.0f, 0.0f, 1.0f);
-			glRotatef(90, 0, 1, 0);
-			glTranslatef(0.0f, 0.0f, -0.5f);
-			glScalef(5, 1, 1);
-			DrawQuads();
-
-		glPopMatrix();
-
+	drawBigSquare();
 
 	glPopMatrix();
+
+	//drawpiramide()
+
+	for (int i = 0; i < 10; i++)
+	{
+		arrayPiramides[i].dibujarPiramide(1, 0, 1, dt);
+	}
+
+
+	//Piramide1.dibujarPiramide(0,0,1);
 
 	glutSwapBuffers(); //intercambia los búferes de la ventana actual si tiene doble búfer.
 }
@@ -201,14 +204,11 @@ void InputDown(int key, int xx, int yy)
 {
 	switch (key)
 	{
-	case GLUT_KEY_LEFT://Vista Ortho
-		changeWindowSizeOrtho();
+	case GLUT_KEY_RIGHT:
+		goingRight = true;
 		break;
-	case GLUT_KEY_RIGHT://Vista Perspective
-		changeWindowSizePerspective();
-		break;
-	case GLUT_KEY_UP://Vista Frustum
-		changeWindowSizeFrustum();
+	case GLUT_KEY_LEFT:
+		goingLeft = true;
 		break;
 	}
 }
@@ -217,7 +217,11 @@ void InputUp(int key, int xx, int yy)
 {
 
 	switch (key) {
-	case GLUT_KEY_UP:
+	case GLUT_KEY_RIGHT:
+		goingRight = false;
+		break;
+	case GLUT_KEY_LEFT:
+		goingLeft = false;
 		break;
 	}
 }

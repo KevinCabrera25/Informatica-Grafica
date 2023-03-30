@@ -1,0 +1,3 @@
+﻿  ConsoleApplication1.cpp
+D:\respaldo hp pavillion ryzen\Amerike\4° Semestre\Informatica-Grafica\2° Parcial\Asesoria_Actividad_Pendulo\ConsoleApplication1.cpp(36,14): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  ConsoleApplication1.vcxproj -> D:\respaldo hp pavillion ryzen\Amerike\4° Semestre\Informatica-Grafica\2° Parcial\Asesoria_Actividad_Pendulo\Debug\ConsoleApplication1.exe
