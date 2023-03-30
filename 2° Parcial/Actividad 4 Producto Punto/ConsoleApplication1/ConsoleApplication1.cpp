@@ -1,3 +1,6 @@
+// Actividad 4 Producto Punto
+// Kevin Cabrera
+
 #include <Windows.h>
 #include <thread>
 #include <GL\glew.h>
@@ -19,6 +22,8 @@ float amplitudB = 5;
 bool goingLeft = false, goingRight = false;
 
 float PI = 3.1416;
+
+float a = 0;
 
 float opacidad = 0.0f;
 
@@ -65,18 +70,34 @@ float ProductoPunto(float vector1[], float vector2[])
 	return producto;
 }
 
+void DibujarVectores(float f, float amp)
+{
+	// Para usar el framerate para las mismas velocidades
+	a += dt * 2;
+
+	float frecuencia = f;
+	float amplitud = amp;
+	float offset = -2.0f;
+
+	// sin(a*frecuencia) modifica la velocidad a la que va cada ciclo
+	// sin(x) * amplitud modifica la amplitud, la distancia en x del centro, y en Y es menor la distancia
+	float xPos = (sin(a * frecuencia) * amplitud);
+	float yPos = (cos(a * frecuencia) * amplitud);
+
+	glPushMatrix();
+	glColor3f(1.0f, 1.0f, 1.0f);
+		glBegin(GL_LINES);
+			glVertex2f(0.0f, 0.0f);
+			glVertex2f(xPos, yPos);
+		glEnd();
+	glPopMatrix();
+}
+
 
 void IngresarVectores(float vector[3])
 {
 	cout << "Ingrese los componentes x, y, z del vector: " << endl;
 	cin >> vector[0] >> vector[1] >> vector[2];
-}
-
-void ProductoCruz(float vector1[3], float vector2[3], float productoCruz[3])
-{
-	productoCruz[0] = vector1[1] * vector2[2] - vector1[2] * vector2[1];
-	productoCruz[1] = vector1[2] * vector2[0] - vector1[0] * vector2[2];
-	productoCruz[2] = vector1[0] * vector2[1] - vector1[1] * vector2[0];
 }
 
 #pragma region OpenGLSetupInputAndStuff
@@ -166,8 +187,11 @@ void renderScene(void)
 	// Se llama al metodo para generar el poligono
 	Poligono();
 
+	// Metodo dibujar vectores
+	DibujarVectores(0.5f, 3.0f);
+
 	// Se llama al metodo GenerarVectores
-	GenerarVectores(vector1, vector2, productoCruz);
+	// GenerarVectores(vector1, vector2, productoCruz);
 
 
 	glutSwapBuffers(); //intercambia los búferes de la ventana actual si tiene doble búfer.

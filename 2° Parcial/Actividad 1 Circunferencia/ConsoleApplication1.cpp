@@ -19,6 +19,8 @@ float PI2 = PI / 2.0f;
 
 float angle = 0.0f;
 
+float a = 0;
+
 float posicionY = 0;
 
 #pragma region OpenGLSetupInputAndStuff
@@ -75,6 +77,7 @@ void DibujarCircunferencia()
 	glEnd();
 }
 
+/*
 void DibujarManecillas(float r, float g, float b, float distance)
 {
 	glBegin(GL_LINE_STRIP);
@@ -86,6 +89,7 @@ void DibujarManecillas(float r, float g, float b, float distance)
 	glEnd();
 	posicionY = distance;
 }
+*/
 
 void DibujarCirculoExterior(float r, float g, float b)
 {
@@ -99,6 +103,36 @@ void DibujarCirculoExterior(float r, float g, float b)
 				glVertex2f((circuloRadio * cos(i * PI / 180)), (circuloRadio * sin(i * PI / 180)));
 			}
 		glEnd();
+}
+
+void DibujarManecillas(float f, float amp, float r, float g, float b)
+{
+	// Para usar el framerate para las mismas velocidades
+	a += dt * 2;
+
+	float frecuencia = f;
+	float amplitud = amp;
+	float offset = -2.0f;
+
+	// sin(a*frecuencia) modifica la velocidad a la que va cada ciclo
+	// sin(x) * amplitud modifica la amplitud, la distancia en x del centro, y en Y es menor la distancia
+	float xPos = (sin(a * frecuencia) * amplitud);
+	float yPos = (cos(a * frecuencia) * amplitud);
+
+	// Dibujar Manecillas
+	glPushMatrix();
+	glColor3f(r, g, b);
+		glBegin(GL_LINES);
+			glVertex2f(0.0f, 0.0f);
+			glVertex2f(xPos, yPos);
+		glEnd();
+	glPopMatrix();
+
+	// Dibujar Circulo
+	glPushMatrix();
+		glTranslatef(xPos, yPos, 0.0f);
+		DibujarCirculoExterior(r, g, b);
+	glPopMatrix();
 }
 
 void renderScene(void)
@@ -122,12 +156,14 @@ void renderScene(void)
 	
 	DibujarCircunferencia();
 
-	// Manecilla Azul
-	DibujarManecillas(0.0f, 1.0f, 1.0f, 3.5);
-	glPushMatrix();
-		glTranslatef(0.0f, posicionY, 0.0f);
-		DibujarCirculoExterior(0.0f, 1.0f, 1.0f);
-	glPopMatrix();
+	// Manecilla Turquesa
+	DibujarManecillas(0.3f, 3.7f, 0.0f, 1.0f, 1.0f);
+	
+	// Manecilla Rosa
+	DibujarManecillas(0.1f, 3.0f, 1.0f, 0.11f, 0.68f);
+
+	// Manecilla Morada
+	DibujarManecillas(0.02f, 2.2, 0.73f, 0.16f, 0.96f);
 
 
 	glutSwapBuffers(); //intercambia los búferes de la ventana actual si tiene doble búfer.
