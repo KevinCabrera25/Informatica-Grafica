@@ -1,0 +1,4 @@
+﻿  ConsoleApplication1.cpp
+D:\respaldo hp pavillion ryzen\Amerike\4° Semestre\Informatica-Grafica\2° Parcial\Asesoria_Actividad_Pong\ConsoleApplication1.cpp(39,14): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+D:\respaldo hp pavillion ryzen\Amerike\4° Semestre\Informatica-Grafica\2° Parcial\Asesoria_Actividad_Pong\ConsoleApplication1.cpp(60,12): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  ConsoleApplication1.vcxproj -> D:\respaldo hp pavillion ryzen\Amerike\4° Semestre\Informatica-Grafica\2° Parcial\Asesoria_Actividad_Pong\Debug\ConsoleApplication1.exe
