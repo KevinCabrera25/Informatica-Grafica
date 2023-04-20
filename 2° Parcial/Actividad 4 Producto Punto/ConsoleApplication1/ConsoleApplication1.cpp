@@ -19,17 +19,28 @@ float slider = 0;
 float sliderY = 0;
 float amplitud = 10;
 float amplitudB = 5;
-bool goingLeft = false, goingRight = false;
 
 float PI = 3.1416;
 
 float a = 0;
+float b = 0;
+
+float producto = 0.0f;
 
 float opacidad = 0.0f;
 
+// Vector 1
+float xPos = 0.0f;
+float yPos = 0.0f;
+
+// Vector Movement
+bool goingLeft = false, goingRight = false;
+float posX = 0.0f;
+float posY = 0.0f;
+
 // Declaracion del arreglo de vectores
-float vector1[3] = { 6, 4 };
-float vector2[3] = { 3, 2 };
+float vector1[2] = { xPos, yPos };
+float vector2[2] = { posX, posY };
 
 // Arreglo de colores para una figura de 3 vertices
 float color[3][3] = {
@@ -37,9 +48,6 @@ float color[3][3] = {
 	{0, 1, 0},
 	{0, 0, 1}
 };
-
-// Declaracion del arreglo que almacena los valores del vector del Producto Cruz
-float productoCruz[3];
 
 void Poligono() 
 {
@@ -65,12 +73,12 @@ void Poligono()
 
 float ProductoPunto(float vector1[], float vector2[])
 {
-	float producto = 0;
-	producto = vector1[0] * vector2[0] + vector1[1] * vector2[1];
+	producto = (vector1[0] * vector2[0]) + (vector1[1] * vector2[1]);
 	return producto;
+	cout << producto << endl;
 }
 
-void DibujarVectores(float f, float amp)
+void DibujarVector1(float f, float amp)
 {
 	// Para usar el framerate para las mismas velocidades
 	a += dt * 2;
@@ -93,6 +101,37 @@ void DibujarVectores(float f, float amp)
 	glPopMatrix();
 }
 
+void DibujarVector2(float f, float amp)
+{
+	// Para usar el framerate para las mismas velocidades
+	if (goingLeft)
+	{
+		// Movimiento Izquierda
+		b -= dt * 2;
+	}
+	if (goingRight)
+	{
+		// Movimiento Derecha
+		b += dt * 2;
+	}
+	
+	float frecuencia = f;
+	float amplitud = amp;
+	float offset = -2.0f;
+	
+	// sin(a*frecuencia) modifica la velocidad a la que va cada ciclo
+	// sin(x) * amplitud modifica la amplitud, la distancia en x del centro, y en Y es menor la distancia
+	float posX = (sin(b * frecuencia) * amplitud);
+	float posY = (cos(b * frecuencia) * amplitud);
+	
+	glBegin(GL_LINES);
+		// Color Blanco
+		glColor3f(1.0f, 1.0f, 1.0f);
+			// Centro
+			glVertex2f(0.0f, 0.0f);
+			glVertex2f(posX, posY);
+	glEnd();
+}
 
 void IngresarVectores(float vector[3])
 {
@@ -127,33 +166,6 @@ void changeWindowSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void GenerarVectores(float vector1[3], float vector2[3], float productoCruz[3])
-{
-	glColor3f(1.0f, 0.0f, 0.0f);//rojo
-	glLineWidth(1.0f);
-	glBegin(GL_LINES);
-		// Vector1
-		glVertex3f(0.0f, 0.0f, 0.0f);
-		glVertex3f(vector1[0], vector1[1], vector1[2]);
-
-		// Vector2 Azul
-		glColor3f(0.0f, 0.0f, 1.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-		glVertex3f(vector2[0], vector2[1], vector2[2]);
-
-		// Producto Cruz
-		glColor3f(1.0f, 1.0f, 0.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-		glVertex3f(productoCruz[0], productoCruz[1], productoCruz[2]);
-
-		// Suma de Vectores Turquesa
-		glColor3f(0.42f, 0.85f, 1.0f);
-		glVertex3f(0.0f, 0.0f, 0.0f);
-		glVertex3f(vector1[0] + vector2[0], vector1[1] + vector2[1], vector1[2] + vector2[2]);
-	glEnd();
-}
-
-
 
 void Initialization() {
 	cout << "Codigo inicial aqui" << endl;
@@ -177,22 +189,17 @@ void renderScene(void)
 	dt = (t - old_t) / 1000.0f;
 	old_t = t;
 
-	if (goingLeft) slider -= dt * 5;
-	if (goingRight) slider += dt * 5;
-
-	
 	angle += angleVelocity * dt;
 	// Actualiza la variable de escala
 
 	// Se llama al metodo para generar el poligono
 	Poligono();
 
-	// Metodo dibujar vectores
-	DibujarVectores(0.5f, 3.0f);
+	// Metodo que dibuja el vector que siempre se mueve
+	DibujarVector1(0.5f, 3.0f);
 
-	// Se llama al metodo GenerarVectores
-	// GenerarVectores(vector1, vector2, productoCruz);
-
+	// Metodo que dibuja el vector que controla el usuario
+	DibujarVector2(0.6f, 4.0f);
 
 	glutSwapBuffers(); //intercambia los búferes de la ventana actual si tiene doble búfer.
 }
